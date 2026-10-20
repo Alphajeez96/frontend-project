@@ -541,13 +541,6 @@
   flex-shrink: 0;
 }
 
-.previewLines .previewContext {
-  max-width: 32ch;
-  color: var(--color-subtle);
-  font-size: clamp(14px, 2.8cqi, 20px);
-  font-weight: 500;
-}
-
 .previewLines .previewCurrent {
   color: var(--color-text);
   font-size: clamp(22px, 4.6cqi, 36px);

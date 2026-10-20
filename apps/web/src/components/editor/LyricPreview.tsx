@@ -1,4 +1,12 @@
-import {useEffect, useState, type RefObject} from "react";
+import {useEffect, useRef, useState, useLayoutEffect, type RefObject} from "react";
+
+import {
+  m,
+  animate,
+  domAnimation,
+  LazyMotion,
+  useMotionValue,
+} from "motion/react";
 
 import type {Track} from ".";
 import {ScanText} from "lucide-react";
@@ -11,6 +19,9 @@ type Props = {
 };
 
 export const LyricPreview = ({track, selectedId, audioRef}: Props) => {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const offset = useMotionValue(0);
+  const positionedRef = useRef(false);
   const [playback, setPlayback] = useState({activeIndex: -1, contextIndex: 0});
   const lines = track?.lines;
   const hasTimings = lines?.some((line) => line.timing);
@@ -96,8 +107,35 @@ export const LyricPreview = ({track, selectedId, audioRef}: Props) => {
     ? playback.contextIndex
     : Math.max(0, selectedIndex);
   const current = track?.lines[currentIndex];
-  const previous = track?.lines[currentIndex - 1];
-  const next = track?.lines[currentIndex + 1];
+  useLayoutEffect(() => {
+    const element = trackRef.current;
+    if (!element || !current) return;
+
+    let animation: ReturnType<typeof animate> | undefined;
+    const centerLine = () => {
+      const row = element.children[currentIndex] as HTMLElement | undefined;
+      if (!row) return;
+      const target = -(row.offsetTop + row.offsetHeight / 2);
+      animation?.stop();
+      if (!positionedRef.current) {
+        offset.set(target);
+        positionedRef.current = true;
+      } else {
+        animation = animate(offset, target, {
+          duration: 0.3,
+          ease: [0.455, 0.03, 0.515, 0.955],
+        });
+      }
+    };
+
+    centerLine();
+    const observer = new ResizeObserver(centerLine);
+    observer.observe(element);
+    return () => {
+      animation?.stop();
+      observer.disconnect();
+    };
+  }, [currentIndex, current, lines, offset]);
 
   return (
     <section
@@ -113,31 +151,42 @@ export const LyricPreview = ({track, selectedId, audioRef}: Props) => {
         </h2>
       </div>
 
-      <div
-        className={`flex flex-col justify-center flex-1 gap-3 min-h-0 overflow-y-auto text-center ${styles.previewLines}`}
-      >
-        {current ? (
-          <>
-            <p className={styles.previewContext} aria-hidden={!previous}>
-              {previous?.text ?? "\u00a0"}
-            </p>
-            <p
-              className={styles.previewCurrent}
-              data-active={!hasTimings || playback.activeIndex >= 0}
-              aria-current={
-                hasTimings && playback.activeIndex >= 0 ? "true" : undefined
-              }
+      <LazyMotion features={domAnimation}>
+        <div
+          className={`relative flex flex-col justify-center flex-1 min-h-0 overflow-hidden text-center ${styles.previewLines}`}
+        >
+          {current ? (
+            <m.div
+              ref={trackRef}
+              className="absolute inset-x-0 top-1/2 flex flex-col gap-6"
+              style={{y: offset}}
             >
-              {current.text}
-            </p>
-            <p className={styles.previewContext} aria-hidden={!next}>
-              {next?.text ?? "\u00a0"}
-            </p>
-          </>
-        ) : (
-          <p className="text-muted text-[18px]">Lyrics will appear here</p>
-        )}
-      </div>
+              {lines?.map((line, index) => (
+                <m.p
+                  key={line.id}
+                  className={styles.previewCurrent}
+                  data-active={
+                    index === currentIndex &&
+                    (!hasTimings || playback.activeIndex >= 0)
+                  }
+                  aria-current={index === currentIndex ? "true" : undefined}
+                  animate={{
+                    opacity: index === currentIndex ? 1 : 0.5,
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.455, 0.03, 0.515, 0.955],
+                  }}
+                >
+                  {line.text}
+                </m.p>
+              ))}
+            </m.div>
+          ) : (
+            <p className="text-muted text-[18px]">Lyrics will appear here</p>
+          )}
+        </div>
+      </LazyMotion>
     </section>
   );
 };
