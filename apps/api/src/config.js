@@ -1,8 +1,11 @@
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { tmpdir } from 'node:os';
 
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-export const DB_PATH = process.env.DB_PATH || join(ROOT, 'data', 'track.db');
+export const DB_PATH = process.env.DB_PATH || (process.env.VERCEL
+  ? join(tmpdir(), 'lyric-alignment', 'track.db')
+  : join(ROOT, 'data', 'track.db'));
 export const PUBLIC_DIR = join(ROOT, 'public');
 export const PORT = Number(process.env.PORT || 4000);
 export const HOST = process.env.HOST || '0.0.0.0';

@@ -1,4 +1,5 @@
 import { createServer } from 'node:http';
+import { pathToFileURL } from 'node:url';
 import { PORT, HOST, AUTH_TOKEN } from './config.js';
 import { send, HttpError, unauthorized, notFound } from './http.js';
 import { getDb } from './db.js';
@@ -78,7 +79,7 @@ async function handle(req, res) {
   await handler(req, res, { token });
 }
 
-const server = createServer((req, res) => {
+export default function handler(req, res) {
   for (const [k, v] of Object.entries(CORS)) res.setHeader(k, v);
 
   handle(req, res).catch((err) => {
@@ -87,16 +88,19 @@ const server = createServer((req, res) => {
     console.error('unhandled:', err);
     send(res, 500, { error: 'internal_error', hint: 'this one is a bug in the fixture, not in your client' });
   });
-});
+}
 
 getDb();
 const result = seed();
 if (!result.skipped) console.log(`seeded ${result.lines} lines`);
 
-server.listen(PORT, HOST, () => {
-  console.log(`api listening on http://localhost:${PORT}  (start at /api/v1)`);
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const server = createServer(handler);
+  server.listen(PORT, HOST, () => {
+    console.log(`api listening on http://localhost:${PORT}  (start at /api/v1)`);
+  });
 
-for (const sig of ['SIGINT', 'SIGTERM']) {
-  process.on(sig, () => server.close(() => process.exit(0)));
+  for (const sig of ['SIGINT', 'SIGTERM']) {
+    process.on(sig, () => server.close(() => process.exit(0)));
+  }
 }

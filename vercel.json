@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "api": {
+      "root": "apps/api",
+      "runtime": "node",
+      "entrypoint": "src/server.js",
+      "installCommand": "SKIP_PLAYWRIGHT_BROWSERS=1 pnpm install --frozen-lockfile",
+      "functions": {
+        "src/server.js": {
+          "includeFiles": "{seed,public/audio}/**"
+        }
+      },
+      "devCommand": "pnpm start"
+    },
+    "web": {
+      "root": "apps/web",
+      "framework": "vite",
+      "installCommand": "SKIP_PLAYWRIGHT_BROWSERS=1 pnpm install --frozen-lockfile",
+      "buildCommand": "pnpm build",
+      "outputDirectory": "dist"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": {
+        "service": "api"
+      }
+    },
+    {
+      "source": "/:path*",
+      "destination": {
+        "service": "web"
+      }
+    }
+  ]
+}
