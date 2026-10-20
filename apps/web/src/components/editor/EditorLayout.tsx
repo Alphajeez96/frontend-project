@@ -6,6 +6,7 @@ import {
   Accessibility,
   PointerSensor,
   PointerActivationConstraints,
+  type DragEndEvent,
 } from "@dnd-kit/dom";
 import {AudioLines} from "lucide-react";
 import {useLyricDocument} from "../../hooks/useLyricDocument";
@@ -47,6 +48,21 @@ export const EditorLayout = ({track, error, onLoadAudio}: Props) => {
 
   const currentTrack = track ? {...track, lines: document.lines} : null;
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const {source, target} = event.operation;
+    if (
+      event.canceled ||
+      !source ||
+      !target ||
+      target.type !== "lyric" ||
+      !isSortable(source)
+    )
+      return;
+    const targetLine = document.lines[source.index];
+    if (targetLine && source.initialIndex !== source.index)
+      document.moveLine(String(source.id), targetLine.id);
+  };
+
   return (
     <DragDropProvider
       sensors={dragSensors}
@@ -65,20 +81,7 @@ export const EditorLayout = ({track, error, onLoadAudio}: Props) => {
       onDragStart={({operation}) => {
         if (operation.source) selectLine(String(operation.source.id));
       }}
-      onDragEnd={(event) => {
-        const {source, target} = event.operation;
-        if (
-          event.canceled ||
-          !source ||
-          !target ||
-          target.type !== "lyric" ||
-          !isSortable(source)
-        )
-          return;
-        const targetLine = document.lines[source.index];
-        if (targetLine && source.initialIndex !== source.index)
-          document.moveLine(String(source.id), targetLine.id);
-      }}
+      onDragEnd={handleDragEnd}
     >
       <main
         className={`flex flex-col relative isolate gap-4 h-dvh mx-auto ${styles.layoutFrame}`}
@@ -96,43 +99,43 @@ export const EditorLayout = ({track, error, onLoadAudio}: Props) => {
           className={`flex flex-col overflow-hidden flex-1 min-h-0 rounded-shell bg-canvas ${styles.layoutShell}`}
         >
           <Toolbar
-            track={currentTrack}
-            onLoadAudio={onLoadAudio}
-            audioRef={audioRef}
             zoom={zoom}
+            track={currentTrack}
+            audioRef={audioRef}
             onZoomChange={setZoom}
+            onLoadAudio={onLoadAudio}
             waveformReady={waveformReady}
           />
 
           <div className={`grid flex-1 min-h-0 ${styles.layoutBody}`}>
             <LyricsPane
-              track={currentTrack}
               error={error}
-              selectedId={selected.id}
+              track={currentTrack}
               onSelect={selectLine}
-              onAddLyrics={document.addLyrics}
+              selectedId={selected.id}
               onMoveBy={document.moveBy}
+              onAddLyrics={document.addLyrics}
             />
 
             <div
               className={`grid min-w-0 min-h-0 gap-5 p-5 ${styles.layoutWorkspace}`}
             >
               <LyricPreview
+                audioRef={audioRef}
                 track={currentTrack}
                 selectedId={selected.id}
-                audioRef={audioRef}
               />
 
               <Timeline
-                track={currentTrack}
-                selectedId={selected.id}
-                onSelect={selectLine}
-                onTiming={document.setTiming}
-                onPlace={document.placeLine}
-                audioRef={audioRef}
                 zoom={zoom}
+                audioRef={audioRef}
+                track={currentTrack}
+                onSelect={selectLine}
                 onZoomChange={setZoom}
+                selectedId={selected.id}
                 onReady={setWaveformReady}
+                onPlace={document.placeLine}
+                onTiming={document.setTiming}
               />
             </div>
 

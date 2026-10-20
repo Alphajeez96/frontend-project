@@ -13,7 +13,7 @@ const variants = {
   tertiary:
     "border-transparent bg-transparent text-muted enabled:hover:bg-border enabled:hover:text-text enabled:active:bg-border-strong",
   danger:
-    "border-transparent bg-transparent text-muted enabled:hover:bg-raised enabled:hover:text-danger enabled:active:bg-border focus-visible:outline-danger",
+    "border-transparent bg-transparent text-muted enabled:hover:bg-raised enabled:hover:text-danger enabled:active:bg-border",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
