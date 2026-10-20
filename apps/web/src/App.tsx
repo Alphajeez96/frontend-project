@@ -1,15 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api, ApiError } from './api';
-
-/**
- * Deliberately partial. These are the only fields this placeholder reads; the
- * payload has a good deal more in it. Type the rest as you need it.
- */
-type Track = {
-  title: string;
-  audio_url: string;
-  lines: unknown[];
-};
+import { EditorLayout, type Track } from './components/EditorLayout';
 
 export default function App() {
   const [track, setTrack] = useState<Track | null>(null);
@@ -26,14 +17,5 @@ export default function App() {
     return () => { live = false; };
   }, []);
 
-  if (error) return <p>{error}</p>;
-  if (!track) return <p>Loading…</p>;
-
-  return (
-    <>
-      <h1>{track.title}</h1>
-      <p>{track.lines.length} lines</p>
-      <audio controls src={track.audio_url} />
-    </>
-  );
+  return <EditorLayout track={track} error={error} />;
 }

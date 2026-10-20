@@ -1,197 +1,119 @@
-/*
- * Boilerplate. Not a design, and not a hint about one.
- *
- * This file exists so the starting page is not raw browser default: a font
- * stack, a colour scheme that follows the OS, and readable defaults for the
- * handful of elements the placeholder renders. Nothing in here is load-bearing
- * and nothing in here is graded. Rename it, replace it with Tailwind or CSS
- * modules or styled-components, or delete it and start from nothing — all four
- * are fine.
- *
- * Deliberately absent: layout. No grid, no panes, no component classes. How the
- * editor is arranged is one of the choices the exercise is asking you to make,
- * so the scaffold does not make it for you.
- */
-
 :root {
-  /* Colour: light by default, dark below. Swap the values, or the whole idea. */
-  --bg: #fbfbfa;
-  --surface: #ffffff;
-  --border: #e3e2df;
-  --text: #1c1b19;
-  --text-muted: #6b6862;
-  --accent: #2f6f4f;
-  --accent-contrast: #ffffff;
-  --danger: #a33a2c;
-
-  --radius: 6px;
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-6: 24px;
-  --space-8: 32px;
-
-  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
-    'Liberation Mono', monospace;
-
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #17181a;
-    --surface: #1f2124;
-    --border: #33363b;
-    --text: #e8e8e6;
-    --text-muted: #9a9c9f;
-    --accent: #63b98c;
-    --accent-contrast: #10231a;
-    --danger: #e08472;
-  }
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  height: 100%;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-sans);
-  font-size: 15px;
-  line-height: 1.5;
+  color-scheme: light;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  color: #292929;
+  background: #e7e7e5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  --surface: #fafaf9;
+  --surface-secondary: #f3f3f1;
+  --border: #d6d6d2;
+  --muted: #6d6d68;
 }
 
-/* Padding only, so the placeholder is not glued into the corner. Drop it if
- * you want a full-bleed editor. */
-#root {
-  min-height: 100%;
-  padding: var(--space-6);
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, input, textarea { font: inherit; color: inherit; }
+button, input, textarea, output { border: 1px solid var(--border); border-radius: 6px; }
+button { min-height: 38px; padding: 8px 14px; background: var(--surface); white-space: nowrap; }
+button:disabled { color: var(--muted); cursor: not-allowed; }
+input, textarea { width: 100%; padding: 10px; background: var(--surface); }
+input:disabled, textarea:disabled { opacity: 1; -webkit-text-fill-color: var(--muted); }
+textarea::placeholder, input::placeholder { color: var(--muted); opacity: 1; }
+h1, h2, h3, p { margin: 0; }
+h1 { font-size: 15px; line-height: 1.35; font-weight: 600; }
+h2 { font-size: 15px; font-weight: 600; }
+h3 { font-size: 12px; font-weight: 500; }
+p { color: var(--muted); line-height: 1.5; }
+:focus-visible { outline: 2px solid #4d4d49; outline-offset: 3px; }
+
+.app-frame { max-width: 1800px; margin-inline: auto; padding: 28px 32px 32px; }
+.workspace-caption { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 16px; font-size: 12px; color: var(--muted); }
+.workspace-caption > :first-child { font-weight: 600; color: #393936; }
+.editor-shell { display: flex; flex-direction: column; height: calc(100dvh - 94px); min-height: 640px; border: 1px solid #c5c5c0; border-radius: 10px; overflow: hidden; background: var(--surface); }
+.editor-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; min-height: 76px; padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--surface-secondary); }
+.track-controls, .toolbar-actions, .playback-controls, .zoom-controls { display: flex; align-items: center; gap: 12px; }
+.track-controls { flex-wrap: wrap; min-width: 0; }
+.track-details { min-width: 130px; }
+.track-details p { font-size: 12px; margin-top: 3px; }
+.track-duration, .timecode { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--muted); }
+.playback-controls { border-left: 1px solid var(--border); padding-left: 16px; }
+.play-button, .zoom-controls button { width: 38px; padding: 8px; }
+.play-button svg { display: block; width: 20px; height: 20px; fill: currentColor; }
+.zoom-controls { gap: 6px; }
+.zoom-controls > span { font-size: 12px; color: var(--muted); margin-right: 4px; }
+
+/* The wireframe's side panes occupy about 20% and 18%; the center gets the rest. */
+.editor-body { display: grid; grid-template-columns: minmax(230px, 20fr) minmax(0, 62fr) minmax(210px, 18fr); flex: 1; min-height: 0; }
+.lyrics-pane, .inspector { display: flex; flex-direction: column; min-height: 0; min-width: 0; padding: 20px; background: var(--surface-secondary); }
+.lyrics-pane { border-right: 1px solid var(--border); }
+.lyrics-pane > h2 { margin-bottom: 18px; }
+.lyrics-pane textarea { min-height: 110px; height: 130px; resize: none; border-style: dashed; }
+.lyrics-actions { display: grid; gap: 8px; margin-top: 10px; }
+.pane-summary { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin: 24px 0 12px; color: var(--muted); font-size: 12px; }
+.pane-summary h3 span { margin-left: 6px; }
+.lyrics-scroll { flex: 1; min-height: 120px; overflow-y: auto; scrollbar-width: thin; }
+.lyric-list { list-style: none; padding: 0; margin: 0; }
+.lyric-list li { display: grid; grid-template-columns: 12px minmax(0, 1fr) 12px; align-items: start; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.line-grip, .untimed-mark { color: var(--muted); }
+.pane-hint { font-size: 12px; padding-top: 20px; margin-top: auto; }
+
+.editor-workspace { display: grid; grid-template-rows: minmax(min-content, 0.85fr) minmax(260px, 1.15fr); gap: 24px; min-width: 0; min-height: 0; padding: 24px; overflow-y: auto; }
+.lyric-preview { display: flex; flex-direction: column; min-height: min-content; padding: 18px 20px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-secondary); }
+.lyric-preview h2 { font-size: 12px; font-weight: 500; color: var(--muted); }
+.preview-lines { display: flex; flex-direction: column; justify-content: center; flex: 1; gap: 10px; padding: 24px 0; }
+.preview-lines p { font-size: clamp(16px, 1.6vw, 24px); font-weight: 500; line-height: 1.4; overflow-wrap: anywhere; }
+.timeline { display: flex; flex-direction: column; min-height: 260px; }
+.timeline-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+.timeline-heading span { font-size: 12px; color: var(--muted); }
+.time-ruler { display: flex; justify-content: space-between; height: 30px; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.time-ruler span { position: relative; }
+.time-ruler span::after { position: absolute; content: ''; bottom: 0; left: 0; height: 6px; border-left: 1px solid var(--border); }
+.time-ruler span:last-child::after { left: auto; right: 0; }
+.timeline-canvas { display: grid; grid-template-rows: 1fr 0.65fr; flex: 1; min-height: 200px; margin-top: 12px; border: 1px solid var(--border); border-radius: 6px; }
+.waveform-placeholder, .segment-placeholder { display: grid; place-items: center; color: var(--muted); font-size: 12px; }
+.segment-placeholder { border-top: 1px dashed var(--border); background: var(--surface-secondary); }
+
+.inspector { border-left: 1px solid var(--border); }
+.inspector-selection { margin: 20px 0 28px; font-size: 12px; }
+.timing-fields { border: 0; margin: 0; padding: 0; display: grid; gap: 12px; }
+.timing-fields label { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 8px; align-items: center; font-size: 12px; color: var(--muted); }
+.timing-fields input { min-width: 0; font-variant-numeric: tabular-nums; }
+.timing-fields output { min-height: 38px; padding: 9px 10px; border-style: dashed; }
+.segment-actions { display: grid; gap: 8px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+@media (max-width: 1100px) {
+  .app-frame { padding: 20px; }
+  .editor-shell { height: auto; min-height: calc(100dvh - 78px); }
+  .editor-body { grid-template-columns: 230px minmax(0, 1fr); }
+  .lyrics-pane { grid-row: span 2; }
+  .lyrics-scroll { max-height: 460px; }
+  .editor-workspace { min-height: 580px; }
+  .inspector { border-left: 0; border-top: 1px solid var(--border); }
+  .timing-fields { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .timing-fields label { grid-template-columns: 1fr; }
+  .segment-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .segment-actions button { padding-inline: 8px; white-space: normal; }
 }
 
-h1,
-h2,
-h3 {
-  margin: 0 0 var(--space-2);
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-}
-
-h1 {
-  font-size: 1.5rem;
-}
-
-h2 {
-  font-size: 1.125rem;
-}
-
-h3 {
-  font-size: 1rem;
-}
-
-p {
-  margin: 0 0 var(--space-3);
-  color: var(--text-muted);
-}
-
-a {
-  color: var(--accent);
-  text-underline-offset: 2px;
-}
-
-code,
-kbd,
-pre,
-samp {
-  font-family: var(--font-mono);
-  font-size: 0.875em;
-}
-
-kbd {
-  padding: 1px var(--space-1);
-  border: 1px solid var(--border);
-  border-bottom-width: 2px;
-  border-radius: 4px;
-  background: var(--surface);
-}
-
-/* Form controls, because the browser defaults for these are the loudest part
- * of an unstyled page. */
-button,
-input,
-select,
-textarea {
-  font: inherit;
-  color: inherit;
-}
-
-button {
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  cursor: pointer;
-}
-
-button:hover:not(:disabled) {
-  border-color: var(--text-muted);
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-input,
-select,
-textarea {
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-}
-
-textarea {
-  resize: vertical;
-}
-
-/* One visible focus ring for everything, rather than three different ones. */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-audio {
-  width: 100%;
-  max-width: 420px;
-}
-
-::selection {
-  background: var(--accent);
-  color: var(--accent-contrast);
-}
-
-/* Nothing animates on load — an entry transition would make the Playwright
- * visibility assertions flaky for no gain. If you add motion, respect this. */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+@media (max-width: 680px) {
+  .app-frame { padding: 16px 12px; }
+  .workspace-caption { margin-inline: 4px; }
+  .editor-toolbar { padding: 16px; gap: 16px; }
+  .track-controls { width: 100%; gap: 12px; }
+  .track-details { flex: 1; min-width: 100px; }
+  .playback-controls { width: 100%; border-left: 0; padding-left: 0; }
+  .toolbar-actions { width: 100%; justify-content: space-between; }
+  .editor-body { grid-template-columns: minmax(0, 1fr); }
+  .lyrics-pane { grid-row: auto; border-right: 0; border-bottom: 1px solid var(--border); padding: 20px; }
+  .lyrics-scroll { max-height: 220px; flex: auto; }
+  .editor-workspace { padding: 20px; gap: 24px; min-height: 560px; }
+  .lyric-preview { padding: 16px; }
+  .preview-lines p { font-size: 18px; }
+  .inspector { padding: 20px; }
+  .timing-fields { grid-template-columns: 1fr; }
+  .timing-fields label { grid-template-columns: 64px minmax(0, 1fr); }
 }
