@@ -1,0 +1,975 @@
+.layoutFrame {
+  max-width: 1800px;
+  padding: 20px 24px 24px;
+}
+
+.layoutFrame::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.45;
+  background: var(--color-page) url('../../assets/halftone-waves.svg') center / cover no-repeat;
+}
+
+.layoutCaption {
+  min-height: 20px;
+}
+
+.layoutCaption > span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.layoutCaption svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-accent-hover);
+}
+
+.layoutShell {
+  border: 1px solid var(--color-border-strong);
+}
+
+.layoutBody {
+  grid-template-columns: minmax(250px, 20fr) minmax(0, 62fr) minmax(210px, 18fr);
+}
+
+.layoutWorkspace {
+  grid-template-rows: minmax(0, 45fr) minmax(160px, 55fr);
+}
+
+@media (max-width: 1100px) {
+  .layoutFrame {
+    height: auto;
+    min-height: 100dvh;
+    padding: 20px;
+  }
+
+  .layoutShell {
+    flex: auto;
+  }
+
+  .layoutBody {
+    grid-template-columns: 250px minmax(0, 1fr);
+  }
+
+  .layoutWorkspace {
+    min-height: 580px;
+  }
+}
+
+@media (max-width: 680px) {
+  .layoutFrame {
+    padding: 16px 12px;
+  }
+
+  .layoutBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .layoutWorkspace {
+    padding: 16px;
+  }
+}
+
+.toolbarToolbar {
+  min-height: 80px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.toolbarTrackGroup, .toolbarTrack, .toolbarPlayback, .toolbarActions, .toolbarZoom {
+  display: flex;
+  align-items: center;
+}
+
+.toolbarTrackGroup {
+  max-width: 100%;
+}
+
+.toolbarTrack > svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-muted);
+  stroke-width: 1.5;
+}
+
+.toolbarTrack h1 {
+  max-width: 24ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.toolbarTrack p {
+  margin-top: 4px;
+  color: var(--color-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.toolbarPlayback {
+  padding-left: 24px;
+  border-left: 1px solid var(--color-border);
+}
+
+.toolbarPlayButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.toolbarPlayButton svg {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
+  stroke-width: 1.5;
+}
+
+.toolbarPlayButton[data-playing='false'] svg {
+  transform: translateX(1px);
+}
+
+.toolbarTimecode {
+  min-width: 42px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.toolbarZoom {
+  gap: 0;
+  border: 1px solid var(--color-border-strong);
+}
+
+.toolbarZoom button {
+  border: 0;
+  min-height: 30px;
+  height: 30px;
+  border-radius: 3px;
+}
+
+.toolbarZoom .toolbarZoomLevel {
+  min-width: 42px;
+  padding-inline: 6px;
+  color: var(--color-text);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.toolbarError {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 1;
+  width: 230px;
+  padding: 10px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-raised);
+  font-size: 12px;
+}
+
+@media (max-width: 1200px) {
+  .toolbarToolbar {
+    gap: 16px;
+  }
+
+  .toolbarTrackGroup {
+    gap: 12px;
+  }
+
+  .toolbarTrack > svg {
+    display: none;
+  }
+
+  .toolbarPlayback {
+    padding-left: 16px;
+  }
+}
+
+@media (max-width: 680px) {
+  .toolbarToolbar {
+    padding: 16px;
+  }
+
+  .toolbarTrackGroup {
+    width: 100%;
+  }
+
+  .toolbarTrack {
+    flex: 1;
+  }
+
+  .toolbarPlayback {
+    padding-left: 0;
+    border: 0;
+  }
+
+  .toolbarActions {
+    gap: 8px;
+  }
+}
+
+.toolbarFileInput {
+  display: none;
+}
+
+.toolbarTrackGroup > button {
+  flex-shrink: 0;
+}
+
+.toolbarTrack > div {
+  min-width: 0;
+}
+
+.lyricsPane {
+  padding: 18px 12px 14px;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.lyricsHeading h2, .inspectorHeading h2 {
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.lyricsHeading svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-muted);
+}
+
+.lyricsPane textarea,
+.lyricsAddLineForm input,
+.inspectorFields input, .inspectorFields output,
+.inspectorSelection textarea,
+.inspectorSplitForm textarea, .inspectorSplitForm input {
+  width: 100%;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+}
+
+.lyricsPane textarea {
+  height: 96px;
+  min-height: 96px;
+  padding: 12px;
+  resize: none;
+  color: var(--color-text);
+  font-size: 13px;
+  line-height: 1.6;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.lyricsPane textarea::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+.lyricsAddLineForm input:focus,
+.inspectorSelection textarea:focus,
+.inspectorFields input:focus, .inspectorSplitForm input:focus, .inspectorSplitForm textarea:focus {
+  border-color: var(--color-muted);
+}
+
+.lyricsPane textarea:focus {
+  outline: none;
+  border-color: var(--color-muted);
+}
+
+.lyricsImportActions {
+  grid-template-columns: 1fr;
+}
+
+.lyricsImportActions button {
+  padding-inline: 8px;
+  font-size: 12px;
+}
+
+.lyricsSummary {
+  margin: 20px 4px 12px;
+}
+
+.lyricsSummary h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.lyricsSummary h3 span {
+  display: grid;
+  place-items: center;
+  min-width: 23px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: var(--color-border);
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.lyricsScroll {
+  padding: 2px 4px 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+.lyricsScroll[data-empty='true'] {
+  display: grid;
+  place-items: center;
+}
+
+.lyricsEmpty {
+  max-width: 24ch;
+  padding: 24px 12px;
+  line-height: 1.6;
+}
+
+.lyricsEmpty svg {
+  width: 36px;
+  height: 36px;
+  color: var(--color-subtle);
+  stroke-width: 1.4;
+}
+
+.lyricsRowCard {
+  position: relative;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: stretch;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-raised);
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.lyricsRowCard[data-selected='true'] {
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 9%, var(--color-raised));
+}
+
+.lyricsRowCard .lyricsRow:focus-visible,
+.lyricsRowCard .lyricsHandle:focus-visible {
+  outline: none;
+}
+
+.lyricsRowCard:has(:focus-visible) {
+  border-color: var(--color-focus);
+}
+
+.lyricsRowCard[data-dragging='true'] {
+  opacity: 0.45;
+}
+
+.lyricsRowCard[data-drop-target='true'] {
+  border-color: var(--color-accent-hover);
+  border-style: dashed;
+  background: color-mix(in srgb, var(--color-accent) 16%, var(--color-raised));
+}
+
+.lyricsRowCard .lyricsRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+  gap: 8px;
+  padding: 12px 10px 12px 4px;
+  color: var(--color-text);
+  background: transparent;
+  border: 0;
+  transform: none;
+  text-align: left;
+  white-space: normal;
+  font-weight: 400;
+}
+
+.lyricsRowCard .lyricsRow:active {
+  transform: none;
+  background: var(--color-border);
+}
+
+.lyricsRowCard .lyricsHandle {
+  touch-action: none;
+  align-self: stretch;
+  width: 24px;
+  height: auto;
+  min-height: 44px;
+  padding: 0;
+  color: var(--color-muted);
+  cursor: grab;
+  border-radius: var(--radius-control) 0 0 var(--radius-control);
+}
+
+.lyricsRowCard .lyricsHandle:active {
+  cursor: grabbing;
+  transform: none;
+}
+
+.lyricsRowCard .lyricsHandle svg {
+  width: 15px;
+  height: 15px;
+}
+
+.lyricsLineText {
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.lyricsRowCard .lyricsUntimedIcon {
+  width: 12px;
+  height: 12px;
+  margin-top: 4px;
+  color: var(--color-muted);
+}
+
+.lyricsAddLineForm input {
+  min-width: 0;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.lyricsHint {
+  padding: 14px 4px 0;
+  line-height: 1.5;
+}
+
+.lyricsHint svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.lyricsMessage {
+  padding: 8px 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lyricsRowCard:hover {
+    border-color: var(--color-muted);
+    background: var(--color-border);
+  }
+
+  .lyricsRowCard[data-selected='true']:hover {
+    border-color: var(--color-accent-hover);
+  }
+
+  .lyricsPane textarea:hover:not(:focus) {
+    border-color: var(--color-muted);
+  }
+}
+
+@media (max-width: 1100px) {
+  .lyricsPane {
+    grid-row: span 2;
+  }
+
+  .lyricsScroll {
+    max-height: 460px;
+  }
+
+  .lyricsScroll[data-empty='true'] {
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 680px) {
+  .lyricsPane {
+    grid-row: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .lyricsScroll {
+    max-height: 260px;
+    flex: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lyricsPane textarea, .lyricsRowCard {
+    transition: none;
+  }
+}
+
+.previewPreview {
+  container-type: inline-size;
+  padding: 16px 28px;
+  border: 1px solid var(--color-border);
+}
+
+.previewHeading h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 450;
+}
+
+.previewHeading svg {
+  width: 14px;
+  height: 14px;
+}
+
+.previewLines {
+  padding: 12px 0;
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+}
+
+.previewLines::-webkit-scrollbar {
+  display: none;
+}
+
+.previewLines p {
+  margin-inline: auto;
+  max-width: 32ch;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+  flex-shrink: 0;
+}
+
+.previewLines .previewContext {
+  max-width: 32ch;
+  color: var(--color-subtle);
+  font-size: clamp(14px, 2.8cqi, 20px);
+  font-weight: 500;
+}
+
+.previewLines .previewCurrent {
+  color: var(--color-text);
+  font-size: clamp(22px, 4.6cqi, 36px);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+.previewLines .previewCurrent[data-active='false'] {
+  color: var(--color-muted);
+}
+
+@media (max-width: 680px) {
+  .previewPreview {
+    padding: 18px;
+  }
+}
+
+.timelineRuler {
+  height: 28px;
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.timelineRuler > div {
+  position: relative;
+  height: 100%;
+}
+
+.timelineEnd {
+  position: absolute;
+  z-index: 2;
+  inset: 0 0 0 auto;
+  display: flex;
+  align-items: end;
+  padding: 0 4px 2px 8px;
+  border-right: 1px solid var(--color-muted);
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-size: 11px;
+}
+
+.timelineCanvas {
+  min-height: 80px;
+  border: 1px solid var(--color-border);
+}
+
+.timelineScrollViewport {
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+.timelineScrollContent {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 1fr 0.65fr;
+}
+
+.timelineScrollContent .timelineWaveform {
+  position: sticky;
+  left: 0;
+  width: var(--timeline-viewport-width, 100%);
+}
+
+.timelineWaveform, .timelineSegments {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.timelineWaveform svg, .timelineSegments svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.5;
+}
+
+.timelineWaveformHost {
+  cursor: crosshair;
+}
+
+.timelineLaneViewport {
+  min-height: 52px;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+}
+
+.timelineSegments {
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+  display: block;
+  min-height: 52px;
+}
+
+.timelineScrollContent[data-drop-target='true'] .timelineSegments {
+  background: color-mix(in srgb, var(--color-accent) 6%, var(--color-surface));
+}
+
+.timelineDropMarker {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  bottom: 0;
+  border-left: 2px solid var(--color-accent);
+  pointer-events: none;
+}
+
+.timelineDropMarker span {
+  display: block;
+  padding: 3px 6px;
+  border-radius: 0 0 var(--radius-control) 0;
+  background: var(--color-accent);
+  color: var(--color-page);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timelineDropMarker[data-align-end='true'] span {
+  transform: translateX(-100%);
+  border-radius: 0 0 0 var(--radius-control);
+}
+
+.timelineSegment {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) 10px;
+  min-width: 2px;
+  min-height: 28px;
+  overflow: hidden;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-raised);
+}
+
+.timelineSegment[data-selected='true'] {
+  border-color: var(--color-accent-hover);
+  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-surface));
+}
+
+.timelineSegment .timelineSegmentLabel {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 8px;
+  border: 0;
+  border-radius: 0;
+  justify-content: flex-start;
+  text-align: left;
+  color: var(--color-text);
+  transform: none;
+  background: transparent;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.timelineSegment .timelineSegmentLabel[data-dragging='true'] {
+  cursor: grabbing;
+}
+
+.timelineSegmentLabel span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+.timelineTrimHandle {
+  grid-row: 1;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  min-width: 0;
+  border: 0;
+  color: var(--color-muted);
+  background: color-mix(in srgb, var(--color-muted) 10%, transparent);
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.timelineTrimHandle[data-edge='start'] {
+  grid-column: 1;
+  border-right: 1px solid var(--color-border-strong);
+}
+
+.timelineTrimHandle[data-edge='end'] {
+  grid-column: 3;
+  border-left: 1px solid var(--color-border-strong);
+}
+
+.timelineTrimHandle span {
+  width: 2px;
+  height: 14px;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+.timelineSegment .timelineSegmentLabel:focus-visible {
+  outline: none;
+}
+
+.timelineSegment:has(.timelineSegmentLabel:focus-visible) {
+  border-color: var(--color-focus);
+}
+
+.timelineTrimHandle:focus-visible {
+  outline-offset: -3px;
+  color: var(--color-accent-hover);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .timelineTrimHandle:hover {
+    color: var(--color-text);
+    background: color-mix(in srgb, var(--color-accent) 24%, var(--color-raised));
+  }
+}
+
+.inspectorInspector {
+  padding: 18px 16px;
+  border-left: 1px solid var(--color-border);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+.inspectorInspector > * {
+  flex-shrink: 0;
+}
+
+.inspectorHeading svg {
+  width: 15px;
+  height: 15px;
+  color: var(--color-muted);
+}
+
+.inspectorSelection {
+  margin: 18px 0 22px;
+}
+
+.inspectorSelection p {
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.inspectorSelection > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.inspectorSelection svg {
+  width: 12px;
+  height: 12px;
+}
+
+.inspectorFields label {
+  display: grid;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--color-muted);
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-items: center;
+}
+
+.inspectorFields input, .inspectorFields output {
+  display: block;
+  min-width: 0;
+  padding: 9px 10px;
+  color: var(--color-muted);
+  font-size: 12px;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
+.inspectorFields input::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+.inspectorFields output {
+  border-color: var(--color-border);
+  background: transparent;
+}
+
+.inspectorActions {
+  border-top: 1px solid var(--color-border);
+}
+
+.inspectorActions button {
+  justify-content: flex-start;
+  min-height: 38px;
+}
+
+@media (max-width: 1100px) {
+  .inspectorInspector {
+    border-left: 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .inspectorSelection {
+    margin: 20px 0;
+  }
+
+  .inspectorFields {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .inspectorActions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .inspectorActions button {
+    padding-inline: 8px;
+    white-space: normal;
+    justify-content: center;
+  }
+
+  .inspectorFields label {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .inspectorFields {
+    grid-template-columns: 1fr;
+  }
+
+  .inspectorFields label {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+}
+
+.inspectorSelection textarea {
+  height: 76px;
+  min-height: 76px;
+  resize: none;
+  padding: 10px;
+  color: var(--color-text);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.inspectorSelection textarea::placeholder {
+  color: var(--color-muted);
+}
+
+.inspectorFields input {
+  color: var(--color-text);
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.inspectorFields input[aria-invalid='true'] {
+  border-color: color-mix(in srgb, var(--color-danger) 65%, var(--color-border-strong));
+}
+
+.inspectorSelection .inspectorTimed {
+  color: var(--color-focus);
+}
+
+.inspectorValidation {
+  line-height: 1.6;
+}
+
+.inspectorSplitForm {
+  padding: 14px 12px;
+  border: 1px solid var(--color-border-strong);
+}
+
+.inspectorSplitForm h3 {
+  font-size: 12px;
+  font-weight: 550;
+}
+
+.inspectorSplitForm > p {
+  font-size: 11px;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.inspectorSplitForm label {
+  display: grid;
+  gap: 7px;
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.inspectorSplitForm textarea, .inspectorSplitForm input {
+  min-width: 0;
+  padding: 9px;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.inspectorSplitForm textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inspectorFields input {
+    transition: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .toolbarZoom button { min-height: 44px; height: 44px; }
+}
+
+.lyricsDragPreview {
+  border: 1px solid var(--color-accent);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}

@@ -56,7 +56,7 @@ export const EditorLayout = ({track, error, onLoadAudio}: Props) => {
             ? Accessibility.configure({
                 screenReaderInstructions: {
                   draggable:
-                    "Press Enter to place the selected lyric at the playhead. Use Alt and arrow up or down to reorder. Space controls song playback.",
+                    "Drag to reorder or place on the waveform or segment lane. Use Alt and arrow up or down to reorder with the keyboard. Space controls song playback.",
                 },
               })
             : plugin,
@@ -81,33 +81,10 @@ export const EditorLayout = ({track, error, onLoadAudio}: Props) => {
       }}
     >
       <main
-        className={`flex flex-col ${styles.layoutFrame}`}
-        onKeyDownCapture={(event) => {
-          const target = event.target as HTMLElement;
-          if (
-            event.key !== "Enter" ||
-            event.defaultPrevented ||
-            event.ctrlKey ||
-            event.metaKey ||
-            event.altKey ||
-            event.shiftKey ||
-            event.nativeEvent.isComposing ||
-            target.closest("input, textarea, select, [contenteditable=true]") ||
-            (target.closest("button, a") &&
-              !target.closest("[data-lyric-id]")) ||
-            !selected.id ||
-            !audioRef.current ||
-            !waveformReady
-          )
-            return;
-
-          event.preventDefault();
-          if (event.repeat) return;
-          document.placeLine(selected.id, audioRef.current.currentTime, true);
-        }}
+        className={`flex flex-col relative isolate gap-4 h-dvh mx-auto ${styles.layoutFrame}`}
       >
         <div
-          className={`flex items-center justify-between shrink-0 ${styles.layoutCaption}`}
+          className={`flex items-center justify-between shrink-0 gap-4 ${styles.layoutCaption}`}
         >
           <span>
             <AudioLines aria-hidden="true" />
@@ -115,7 +92,9 @@ export const EditorLayout = ({track, error, onLoadAudio}: Props) => {
           </span>
         </div>
 
-        <div className={`flex flex-col overflow-hidden ${styles.layoutShell}`}>
+        <div
+          className={`flex flex-col overflow-hidden flex-1 min-h-0 rounded-shell bg-canvas ${styles.layoutShell}`}
+        >
           <Toolbar
             track={currentTrack}
             onLoadAudio={onLoadAudio}
@@ -125,7 +104,7 @@ export const EditorLayout = ({track, error, onLoadAudio}: Props) => {
             waveformReady={waveformReady}
           />
 
-          <div className={styles.layoutBody}>
+          <div className={`grid flex-1 min-h-0 ${styles.layoutBody}`}>
             <LyricsPane
               track={currentTrack}
               error={error}
@@ -135,7 +114,9 @@ export const EditorLayout = ({track, error, onLoadAudio}: Props) => {
               onMoveBy={document.moveBy}
             />
 
-            <div className={`grid min-w-0 min-h-0 ${styles.layoutWorkspace}`}>
+            <div
+              className={`grid min-w-0 min-h-0 gap-5 p-5 ${styles.layoutWorkspace}`}
+            >
               <LyricPreview
                 track={currentTrack}
                 selectedId={selected.id}
@@ -173,8 +154,14 @@ export const EditorLayout = ({track, error, onLoadAudio}: Props) => {
           </div>
         </div>
       </main>
-      <DragOverlay className={styles.lyricsDragPreview} dropAnimation={null}>
-        {(source) => <span>{source.data.text}</span>}
+      <DragOverlay dropAnimation={null}>
+        {(source) => (
+          <div
+            className={`p-3 text-text bg-raised rounded-control text-[13px] pointer-events-none ${styles.lyricsDragPreview}`}
+          >
+            {source.data.text}
+          </div>
+        )}
       </DragOverlay>
     </DragDropProvider>
   );
