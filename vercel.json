@@ -8,7 +8,7 @@
       "installCommand": "SKIP_PLAYWRIGHT_BROWSERS=1 pnpm install --frozen-lockfile",
       "functions": {
         "src/server.js": {
-          "includeFiles": "{seed,public/audio}/**"
+          "includeFiles": "apps/api/{seed,public/audio}/**"
         }
       },
       "devCommand": "pnpm start"
@@ -18,7 +18,13 @@
       "framework": "vite",
       "installCommand": "SKIP_PLAYWRIGHT_BROWSERS=1 pnpm install --frozen-lockfile",
       "buildCommand": "pnpm build",
-      "outputDirectory": "dist"
+      "outputDirectory": "dist",
+      "rewrites": [
+        {
+          "source": "/",
+          "destination": "/index.html"
+        }
+      ]
     }
   },
   "rewrites": [
